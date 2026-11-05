@@ -1,184 +1,508 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MX Linux 23.6 (Xfce) to Windows 10 Transformation Runbook</title>
     <style>
-        :root {
+        :root[data-theme="light"] {
             --win-blue: #0078D7;
-            --win-dark-blue: #005A9E;
-            --bg-light: #F3F3F3;
-            --card-bg: #FFFFFF;
+            --win-blue-hover: #106EBE;
+            --win-blue-light: #4CC2FF;
+            --win-accent-glow: rgba(0, 120, 215, 0.14);
+            --desktop-bg: radial-gradient(circle at 80% 20%, #0078D7 0%, #004E8C 42%, #002050 100%);
+            --window-bg: rgba(243, 243, 243, 0.94);
+            --sidebar-bg: rgba(230, 230, 230, 0.78);
+            --titlebar-bg: #FFFFFF;
+            --titlebar-text: #1F1F1F;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-hover-bg: #FFFFFF;
             --text-main: #1F1F1F;
-            --text-muted: #555555;
-            --code-bg: #1E1E1E;
-            --code-text: #D4D4D4;
-            --border-color: #E1E1E1;
-            --success-bg: #E6F4EA;
+            --text-muted: #5A5A5A;
+            --border-color: rgba(0, 0, 0, 0.12);
+            --reveal-border: rgba(0, 120, 215, 0.45);
+            --code-bg: #121316;
+            --code-header: #1F2024;
+            --code-text: #E6EDF3;
+            --inline-code-bg: rgba(0, 0, 0, 0.07);
+            --success-bg: rgba(19, 115, 51, 0.1);
             --success-border: #137333;
             --success-text: #0D652D;
+            --shadow-window: 0 18px 48px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 120, 215, 0.4);
+            --shadow-card: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        :root[data-theme="dark"] {
+            --win-blue: #0078D7;
+            --win-blue-hover: #1883D7;
+            --win-blue-light: #4CC2FF;
+            --win-accent-glow: rgba(76, 194, 255, 0.14);
+            --desktop-bg: radial-gradient(circle at 82% 22%, #005A9E 0%, #00274D 45%, #090D16 100%);
+            --window-bg: rgba(25, 25, 25, 0.93);
+            --sidebar-bg: rgba(32, 32, 32, 0.82);
+            --titlebar-bg: #141414;
+            --titlebar-text: #F3F3F3;
+            --card-bg: rgba(43, 43, 43, 0.88);
+            --card-hover-bg: rgba(50, 50, 50, 0.96);
+            --text-main: #F3F3F3;
+            --text-muted: #B0B0B0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --reveal-border: rgba(76, 194, 255, 0.5);
+            --code-bg: #0C0C0C;
+            --code-header: #1B1B1B;
+            --code-text: #CCCCCC;
+            --inline-code-bg: rgba(255, 255, 255, 0.1);
+            --success-bg: rgba(46, 160, 67, 0.14);
+            --success-border: #2EA043;
+            --success-text: #7EE787;
+            --shadow-window: 0 22px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 120, 215, 0.55);
+            --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-light);
+            background: var(--desktop-bg);
+            background-attachment: fixed;
             color: var(--text-main);
             line-height: 1.6;
             margin: 0;
-            padding: 0;
+            padding: 1.25rem 1.25rem 4rem 1.25rem;
+            min-height: 100vh;
+            transition: background 0.25s ease, color 0.2s ease;
         }
 
-        header {
-            background: linear-gradient(135deg, var(--win-blue), var(--win-dark-blue));
-            color: white;
-            padding: 2.5rem 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .container {
-            max-width: 960px;
+        /* Windows 10 Outer Application Window Frame */
+        .win10-window {
+            max-width: 1260px;
             margin: 0 auto;
+            background: var(--window-bg);
+            backdrop-filter: blur(22px) saturate(140%);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            box-shadow: var(--shadow-window);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        header h1 {
-            margin: 0 0 0.5rem 0;
-            font-size: 2.1rem;
+        /* Windows 10 Titlebar */
+        .win10-titlebar {
+            height: 34px;
+            background: var(--titlebar-bg);
+            color: var(--titlebar-text);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .titlebar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding-left: 0.75rem;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .win-logo {
+            width: 14px;
+            height: 14px;
+            fill: var(--win-blue);
+            flex-shrink: 0;
+        }
+
+        .titlebar-controls {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .theme-switch-btn {
+            height: 100%;
+            background: transparent;
+            color: var(--titlebar-text);
+            border: none;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            padding: 0 0.85rem;
+            font-family: inherit;
+            font-size: 0.76rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .theme-switch-btn:hover {
+            background: rgba(128, 128, 128, 0.18);
+        }
+
+        .win-caption-btn {
+            width: 46px;
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--titlebar-text);
+            font-size: 0.78rem;
+            cursor: default;
+            transition: background 0.12s ease, color 0.12s ease;
+        }
+
+        .win-caption-btn:hover {
+            background: rgba(128, 128, 128, 0.2);
+        }
+
+        .win-caption-btn.close-btn:hover {
+            background: #E81123;
+            color: #FFFFFF;
+        }
+
+        /* Hero Banner inside Window */
+        .hero-banner {
+            background: linear-gradient(135deg, #0078D7 0%, #005A9E 55%, #003966 100%);
+            color: #FFFFFF;
+            padding: 1.85rem 2.25rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .hero-banner::after {
+            content: "";
+            position: absolute;
+            right: -60px;
+            top: -80px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(76, 194, 255, 0.26) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .hero-banner h1 {
+            margin: 0 0 0.4rem 0;
+            font-size: 1.85rem;
             font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
-        header p {
+        .hero-banner p {
             margin: 0;
             opacity: 0.92;
-            font-size: 1.05rem;
+            font-size: 0.98rem;
+            max-width: 720px;
         }
 
         .meta-badges {
-            margin-top: 1.2rem;
+            margin-top: 1.1rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
+            gap: 0.5rem;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.3rem 0.75rem;
-            border-radius: 3px;
-            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 0.22rem 0.7rem;
+            font-size: 0.8rem;
             font-weight: 500;
+            backdrop-filter: blur(6px);
         }
 
-        main {
-            padding: 2rem 1rem 4rem 1rem;
+        /* Windows 10 Settings Split View */
+        .settings-shell {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 720px;
         }
 
-        .toc-card {
+        /* Left Acrylic Navigation Pane */
+        .settings-sidebar {
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(24px) saturate(135%);
+            -webkit-backdrop-filter: blur(24px) saturate(135%);
+            border-right: 1px solid var(--border-color);
+            padding: 1.25rem 0.75rem;
+            position: sticky;
+            top: 34px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .progress-widget {
+            padding: 0.85rem 0.9rem;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-left: 4px solid var(--win-blue);
-            padding: 1.25rem 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .toc-card h2 {
-            margin-top: 0;
-            font-size: 1.2rem;
-            color: var(--win-blue);
+        .progress-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 0.45rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(128, 128, 128, 0.25);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--win-blue), var(--win-blue-light));
+            transition: width 0.25s ease;
+        }
+
+        .progress-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.55rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.15rem 0.5rem;
+            font-family: inherit;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .reset-btn:hover {
+            border-color: var(--win-blue);
+            background: var(--win-accent-glow);
+        }
+
+        .nav-section-label {
+            font-size: 0.74rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            padding: 0 0.65rem;
+            font-weight: 600;
         }
 
         .toc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 0.5rem 1.5rem;
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .toc-grid a {
             color: var(--text-main);
             text-decoration: none;
-            font-size: 0.95rem;
-            display: block;
-            padding: 0.2rem 0;
+            font-size: 0.86rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.55rem;
+            padding: 0.55rem 0.65rem;
+            border-left: 3px solid transparent;
+            transition: background 0.12s ease, border-color 0.12s ease;
         }
 
         .toc-grid a:hover {
-            color: var(--win-blue);
-            text-decoration: underline;
+            background: rgba(128, 128, 128, 0.14);
+            border-left-color: var(--win-blue);
         }
 
+        .toc-grid a.completed-nav {
+            border-left-color: var(--success-border);
+        }
+
+        .nav-item-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            min-width: 0;
+        }
+
+        .nav-icon {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            opacity: 0.82;
+            flex-shrink: 0;
+        }
+
+        .nav-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .toc-grid a.completed-nav .nav-status-dot {
+            background: var(--success-border);
+            border-color: var(--success-border);
+        }
+
+        /* Main Content Area */
+        main.settings-content {
+            padding: 1.75rem 2.25rem 2.5rem 2.25rem;
+            max-width: 920px;
+        }
+
+        /* Fluent Reveal Highlight Phase Cards */
         .phase-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            margin-bottom: 1.75rem;
-            padding: 1.75rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 1.4rem;
+            padding: 1.5rem 1.65rem;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+            background-image: radial-gradient(
+                420px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+                var(--win-accent-glow),
+                transparent 45%
+            );
+        }
+
+        .phase-card:hover {
+            border-color: var(--reveal-border);
+        }
+
+        .phase-card.is-complete {
+            border-left: 4px solid var(--success-border);
         }
 
         .phase-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 2px solid var(--bg-light);
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.75rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.1rem;
         }
 
         .phase-header h2 {
             margin: 0;
-            font-size: 1.35rem;
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: var(--win-blue-light);
+        }
+
+        :root[data-theme="light"] .phase-header h2 {
             color: var(--win-blue);
         }
 
+        /* Windows 10 Fluent Checkbox Pill */
         .step-check {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
+            gap: 0.45rem;
+            font-size: 0.82rem;
+            color: var(--text-main);
+            background: rgba(128, 128, 128, 0.12);
+            border: 1px solid var(--border-color);
+            padding: 0.28rem 0.7rem;
             cursor: pointer;
             user-select: none;
+            flex-shrink: 0;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .step-check:hover {
+            border-color: var(--win-blue);
+            background: var(--win-accent-glow);
         }
 
         .step-check input {
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             accent-color: var(--win-blue);
             cursor: pointer;
+            margin: 0;
         }
 
         ol, ul {
-            padding-left: 1.4rem;
+            padding-left: 1.35rem;
+            margin: 0.5rem 0;
         }
 
         li {
             margin-bottom: 0.65rem;
         }
 
+        /* Windows Terminal Styled Code Blocks */
         pre {
             background-color: var(--code-bg);
             color: var(--code-text);
-            padding: 1rem 1.25rem;
-            border-radius: 4px;
+            padding: 2.35rem 1.15rem 0.95rem 1.15rem;
+            border: 1px solid rgba(128, 128, 128, 0.28);
             overflow-x: auto;
-            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            font-size: 0.9rem;
-            margin: 0.75rem 0 1rem 0;
+            font-family: "Cascadia Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.87rem;
+            margin: 0.65rem 0 0.95rem 0;
             position: relative;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        pre::before {
+            content: ">_ Xfce Terminal (bash)";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background: var(--code-header);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #9CA3AF;
+            font-size: 0.72rem;
+            line-height: 28px;
+            padding-left: 0.85rem;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.02em;
         }
 
         code {
-            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            background-color: #EFEFEF;
-            padding: 0.15rem 0.35rem;
-            border-radius: 3px;
-            font-size: 0.9em;
+            font-family: "Cascadia Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: var(--inline-code-bg);
+            padding: 0.12rem 0.38rem;
+            font-size: 0.88em;
         }
 
         pre code {
@@ -189,291 +513,542 @@
 
         .copy-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #333;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 0.25rem 0.6rem;
-            font-size: 0.75rem;
-            border-radius: 3px;
+            top: 3px;
+            right: 6px;
+            background: #2D2D2D;
+            color: #F3F3F3;
+            border: 1px solid #484848;
+            padding: 0.15rem 0.65rem;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.72rem;
             cursor: pointer;
+            z-index: 2;
+            transition: background 0.15s ease, border-color 0.15s ease;
         }
 
         .copy-btn:hover {
             background: var(--win-blue);
-            border-color: var(--win-blue);
+            border-color: var(--win-blue-light);
         }
 
         .verify-box {
             background-color: var(--success-bg);
             border-left: 4px solid var(--success-border);
             color: var(--success-text);
-            padding: 0.85rem 1.1rem;
-            margin-top: 1.1rem;
-            font-size: 0.93rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 1.35rem 2rem;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             border-top: 1px solid var(--border-color);
+            background: var(--titlebar-bg);
+        }
+
+        /* Fixed Bottom Windows 10 Taskbar (Superbar) */
+        .win10-taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: rgba(16, 16, 16, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 200;
+            color: #FFFFFF;
+            user-select: none;
+            font-size: 0.78rem;
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .taskbar-start-btn {
+            width: 48px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .taskbar-start-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #4CC2FF;
+        }
+
+        .taskbar-start-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: currentColor;
+        }
+
+        .taskbar-app-item {
+            height: 100%;
+            padding: 0 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 3px solid var(--win-blue-light);
+            font-size: 0.78rem;
+        }
+
+        .taskbar-tray {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding-right: 0.65rem;
+            gap: 0.9rem;
+        }
+
+        .taskbar-status-pill {
+            background: rgba(0, 120, 215, 0.32);
+            border: 1px solid rgba(76, 194, 255, 0.4);
+            padding: 0.15rem 0.6rem;
+            font-size: 0.74rem;
+        }
+
+        .taskbar-clock {
+            text-align: right;
+            line-height: 1.2;
+            font-size: 0.72rem;
+            padding: 0 0.4rem;
+        }
+
+        @media (max-width: 920px) {
+            body {
+                padding: 0 0 40px 0;
+            }
+            .settings-shell {
+                grid-template-columns: 1fr;
+            }
+            .settings-sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            main.settings-content {
+                padding: 1.25rem;
+            }
         }
 
         @media print {
-            .copy-btn, .step-check {
+            .copy-btn, .step-check, .win10-taskbar, .win10-titlebar, .settings-sidebar {
                 display: none;
             }
             body {
                 background: white;
+                color: black;
+                padding: 0;
             }
-            .phase-card {
-                break-inside: avoid;
+            .win10-window, .phase-card {
                 box-shadow: none;
+                break-inside: avoid;
+            }
+            .settings-shell {
+                display: block;
             }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <h1>MX Linux 23.6 to Windows 10 Transformation Runbook</h1>
-        <p>Step-by-step guide for configuring Xfce on MX Linux 23.6 with Windows 10 themes, Segoe UI fonts, cursors, and LightDM login settings.</p>
-        <div class="meta-badges">
-            <span class="badge">OS: MX Linux 23.6</span>
-            <span class="badge">Desktop: Xfce</span>
-            <span class="badge">Mode: Permanent Setup</span>
-            <span class="badge">Includes: Fonts &amp; Cursors</span>
+<div class="win10-window" id="top">
+    <!-- Windows 10 Native Window Titlebar -->
+    <div class="win10-titlebar">
+        <div class="titlebar-left">
+            <svg class="win-logo" viewBox="0 0 88 88" aria-hidden="true">
+                <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.529l.028 34.453L.028 75.48.026 45.7zm4.326-39.025L87.314 0v41.527l-47.318.376zm47.329 39.349l-.011 41.34-47.318-6.678-.066-34.739z"/>
+            </svg>
+            <span>Settings - MX Linux 23.6 to Windows 10 Transformation Runbook</span>
+        </div>
+        <div class="titlebar-controls">
+            <button class="theme-switch-btn" id="themeToggleBtn" type="button" onclick="toggleTheme()" title="Switch between Windows 10 Light and Dark mode">
+                <span id="themeToggleLabel">Dark mode</span>
+            </button>
+            <button class="win-caption-btn" type="button" aria-label="Minimize">&#8212;</button>
+            <button class="win-caption-btn" type="button" aria-label="Maximize">&#9633;</button>
+            <button class="win-caption-btn close-btn" type="button" aria-label="Close">&#10005;</button>
         </div>
     </div>
-</header>
 
-<main class="container">
-    <div class="toc-card">
-        <h2>Quick navigation</h2>
-        <ul class="toc-grid">
-            <li><a href="#phase-1">Phase 1: Move the taskbar to the bottom</a></li>
-            <li><a href="#phase-2">Phase 2: Download Windows 10 themes and icons</a></li>
-            <li><a href="#phase-3">Phase 3: Apply the theme, window borders, and icons</a></li>
-            <li><a href="#phase-4">Phase 4: Start menu and taskbar layout</a></li>
-            <li><a href="#phase-5">Phase 5: Wallpaper and desktop icons</a></li>
-            <li><a href="#phase-6">Phase 6: Install Windows 10 fonts (Segoe UI)</a></li>
-            <li><a href="#phase-7">Phase 7: Install and lock Windows 10 cursors</a></li>
-            <li><a href="#phase-8">Phase 8: Save your panel and session</a></li>
-            <li><a href="#phase-9">Phase 9: Windows 10 login screen (optional)</a></li>
-            <li><a href="#troubleshooting">Phase 10: Troubleshooting</a></li>
-        </ul>
-    </div>
+    <!-- Hero Banner -->
+    <header class="hero-banner">
+        <div class="hero-top">
+            <div>
+                <h1>MX Linux 23.6 to Windows 10 Transformation Runbook</h1>
+                <p>Step-by-step guide for configuring Xfce on MX Linux 23.6 with Windows 10 themes, Segoe UI fonts, cursors, and LightDM login settings.</p>
+                <div class="meta-badges">
+                    <span class="badge">OS: MX Linux 23.6</span>
+                    <span class="badge">Desktop: Xfce</span>
+                    <span class="badge">Mode: Permanent Setup</span>
+                    <span class="badge">Includes: Fonts &amp; Cursors</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <!-- PHASE 1 -->
-    <section class="phase-card" id="phase-1">
-        <div class="phase-header">
-            <h2>Phase 1: Move the taskbar to the bottom</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>MX Linux places the panel vertically along the left side of the screen by default. You can move it to the bottom edge in MX Tweak:</p>
-        <ol>
-            <li>Press the Super (Windows) key, type MX Tweak, and press Enter.</li>
-            <li>Select the Panel tab.</li>
-            <li>Check Display panel horizontally and choose Bottom from the position menu.</li>
-            <li>Click Apply in the bottom-right corner.</li>
-        </ol>
-        <div class="verify-box">
-            Check: The panel now runs horizontally along the bottom of the screen with the Start button on the left.
-        </div>
-    </section>
+    <div class="settings-shell">
+        <!-- Sticky Left Windows 10 Settings Navigation Sidebar -->
+        <aside class="settings-sidebar" aria-label="Runbook navigation">
+            <div class="progress-widget">
+                <div class="progress-header">
+                    <span>Transformation progress</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressBarFill"></div>
+                </div>
+                <div class="progress-actions">
+                    <span id="progressCountText">0 of 10 phases complete</span>
+                    <button class="reset-btn" type="button" onclick="resetProgress()">Reset</button>
+                </div>
+            </div>
 
-    <!-- PHASE 2 -->
-    <section class="phase-card" id="phase-2">
-        <div class="phase-header">
-            <h2>Phase 2: Download Windows 10 themes and icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>The B00merang Project publishes GTK themes and icon packs that style Xfce windows and folders like Windows 10.</p>
-        <ol>
-            <li>Open Xfce Terminal and install <code>git</code> if you do not have it yet (<code>sudo</code> asks for your administrator password):
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y git</code></pre>
-            </li>
-            <li>Create the local theme and icon directories inside your home folder:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.themes ~/.icons</code></pre>
-            </li>
-            <li>Clone the Light and Dark GTK themes along with the icon pack:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/B00merang-Project/Windows-10.git ~/.themes/Windows-10
+            <div class="nav-section-label">Quick navigation</div>
+            <ul class="toc-grid" id="tocList">
+                <li>
+                    <a href="#phase-1" data-target="phase-1">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M1 2h14v12H1V2zm1 1v8h12V3H2zm0 9v1h12v-1H2z"/></svg>
+                            <span>Phase 1: Bottom taskbar</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-2" data-target="phase-2">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M8 1v9.5l3.25-3.25.75.75L7.5 12.5 3 8l.75-.75L7 10.5V1h1zM2 13h11v1H2v-1z"/></svg>
+                            <span>Phase 2: Themes and icons</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-3" data-target="phase-3">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M1 2h14v12H1V2zm1 1v2h12V3H2zm0 3v7h12V6H2z"/></svg>
+                            <span>Phase 3: Borders and style</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-4" data-target="phase-4">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M2 2h5v5H2V2zm7 0h5v5H9V2zM2 9h5v5H2V9zm7 0h5v5H9V9z"/></svg>
+                            <span>Phase 4: Start menu layout</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-5" data-target="phase-5">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M1 2h14v12H1V2zm1 1v10h12V3H2zm3 6l2.5-3 2 2.5 1.5-1.5 2 2H3l2-2z"/></svg>
+                            <span>Phase 5: Wallpaper and icons</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-6" data-target="phase-6">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M3 2h10v2h-1V3H8.5v10H10v1H6v-1h1.5V3H4v1H3V2z"/></svg>
+                            <span>Phase 6: Segoe UI fonts</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-7" data-target="phase-7">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M4 1l9 7-4.5.75L11 14l-1.75.75-2.5-5.25L4 12V1z"/></svg>
+                            <span>Phase 7: Mouse cursors</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-8" data-target="phase-8">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M2 2h10l2 2v10H2V2zm1 1v10h10V4.5L11.5 3H10v4H5V3H3zm3 0v3h3V3H6z"/></svg>
+                            <span>Phase 8: Save session</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#phase-9" data-target="phase-9">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M8 2a3 3 0 110 6 3 3 0 010-6zm0 7c3.3 0 6 1.8 6 4v1H2v-1c0-2.2 2.7-4 6-4z"/></svg>
+                            <span>Phase 9: LightDM login</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#troubleshooting" data-target="troubleshooting">
+                        <span class="nav-item-left">
+                            <svg class="nav-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 10.5a.75.75 0 110 1.5.75.75 0 010-1.5zM7.25 4h1.5v5.5h-1.5V4z"/></svg>
+                            <span>Phase 10: Troubleshooting</span>
+                        </span>
+                        <span class="nav-status-dot"></span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Runbook Phases -->
+        <main class="settings-content">
+            <!-- PHASE 1 -->
+            <section class="phase-card" id="phase-1">
+                <div class="phase-header">
+                    <h2>Phase 1: Move the taskbar to the bottom</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-1"> Mark complete</label>
+                </div>
+                <p>MX Linux places the panel vertically along the left side of the screen by default. You can move it to the bottom edge in MX Tweak:</p>
+                <ol>
+                    <li>Press the Super (Windows) key, type MX Tweak, and press Enter.</li>
+                    <li>Select the Panel tab.</li>
+                    <li>Check Display panel horizontally and choose Bottom from the position menu.</li>
+                    <li>Click Apply in the bottom-right corner.</li>
+                </ol>
+                <div class="verify-box">
+                    Check: The panel now runs horizontally along the bottom of the screen with the Start button on the left.
+                </div>
+            </section>
+
+            <!-- PHASE 2 -->
+            <section class="phase-card" id="phase-2">
+                <div class="phase-header">
+                    <h2>Phase 2: Download Windows 10 themes and icons</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-2"> Mark complete</label>
+                </div>
+                <p>The B00merang Project publishes GTK themes and icon packs that style Xfce windows and folders like Windows 10.</p>
+                <ol>
+                    <li>Open Xfce Terminal and install <code>git</code> if you do not have it yet (<code>sudo</code> asks for your administrator password):
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y git</code></pre>
+                    </li>
+                    <li>Create the local theme and icon directories inside your home folder:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.themes ~/.icons</code></pre>
+                    </li>
+                    <li>Clone the Light and Dark GTK themes along with the icon pack:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/B00merang-Project/Windows-10.git ~/.themes/Windows-10
 git clone https://github.com/B00merang-Project/Windows-10-Dark.git ~/.themes/Windows-10-Dark
 git clone https://github.com/B00merang-Artwork/Windows-10.git ~/.icons/Windows-10-Icons</code></pre>
-            </li>
-        </ol>
-        <div class="verify-box">
-            Check: Run <code>ls ~/.themes ~/.icons</code> in the terminal and confirm that <code>Windows-10</code>, <code>Windows-10-Dark</code>, and <code>Windows-10-Icons</code> are listed.
-        </div>
-    </section>
+                    </li>
+                </ol>
+                <div class="verify-box">
+                    Check: Run <code>ls ~/.themes ~/.icons</code> in the terminal and confirm that <code>Windows-10</code>, <code>Windows-10-Dark</code>, and <code>Windows-10-Icons</code> are listed.
+                </div>
+            </section>
 
-    <!-- PHASE 3 -->
-    <section class="phase-card" id="phase-3">
-        <div class="phase-header">
-            <h2>Phase 3: Apply the theme, window borders, and icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>Xfce uses separate settings for inside-window controls (GTK) and top titlebar borders (xfwm4), so you need to update both panels.</p>
-        <ol>
-            <li>Open the Start menu, go to Settings, and select Appearance. On the Style tab, choose Windows-10 for light mode or Windows-10-Dark for dark mode. Then switch to the Icons tab and select Windows-10-Icons.</li>
-            <li>Return to the Settings Manager and open Window Manager. On the Style tab, select Windows-10 or Windows-10-Dark to match your choice above. Under Button layout, make sure Menu is on the left and Minimize, Maximize, and Close are on the right.</li>
-        </ol>
-        <div class="verify-box">
-            Check: Open the Thunar file manager. The window now uses square Windows 10 titlebar buttons with a red close button when you hover over it, and folders use flat yellow icons.
-        </div>
-    </section>
+            <!-- PHASE 3 -->
+            <section class="phase-card" id="phase-3">
+                <div class="phase-header">
+                    <h2>Phase 3: Apply the theme, window borders, and icons</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-3"> Mark complete</label>
+                </div>
+                <p>Xfce uses separate settings for inside-window controls (GTK) and top titlebar borders (xfwm4), so you need to update both panels.</p>
+                <ol>
+                    <li>Open the Start menu, go to Settings, and select Appearance. On the Style tab, choose Windows-10 for light mode or Windows-10-Dark for dark mode. Then switch to the Icons tab and select Windows-10-Icons.</li>
+                    <li>Return to the Settings Manager and open Window Manager. On the Style tab, select Windows-10 or Windows-10-Dark to match your choice above. Under Button layout, make sure Menu is on the left and Minimize, Maximize, and Close are on the right.</li>
+                </ol>
+                <div class="verify-box">
+                    Check: Open the Thunar file manager. The window now uses square Windows 10 titlebar buttons with a red close button when you hover over it, and folders use flat yellow icons.
+                </div>
+            </section>
 
-    <!-- PHASE 4 -->
-    <section class="phase-card" id="phase-4">
-        <div class="phase-header">
-            <h2>Phase 4: Start menu and taskbar layout</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <ol>
-            <li>To replace the Start button icon, right-click the menu button at the bottom-left of the panel and choose Properties. On the Appearance tab, click the Icon button, change the filter to Image Files or All Icons, and pick the Windows logo from <code>~/.icons/Windows-10-Icons/</code>. Set Display to Icon so the word "Menu" is hidden.</li>
-            <li>To group and pin taskbar icons, right-click an empty spot on the panel, open Panel, select Panel Preferences, and switch to the Items tab:
-                <ul>
-                    <li>If Docklike Taskbar is in the list (pre-installed on MX Linux 23.6), open apps already group into square icons. You can right-click any running app icon and choose Pin to Dock.</li>
-                    <li>If your panel uses Window Buttons instead, select it, click the gear icon to edit it, uncheck Show button labels, and set Window grouping to Always.</li>
-                </ul>
-            </li>
-            <li>To match the Windows 10 bar height and color, stay in Panel Preferences. On the Display tab, set Row Size (pixels) to 40. On the Appearance tab, set Background Style to Solid color and pick dark charcoal (<code>#101010</code>).</li>
-        </ol>
-        <div class="verify-box">
-            Check: Open applications appear as square icons along the bottom bar with active indicators underneath.
-        </div>
-    </section>
+            <!-- PHASE 4 -->
+            <section class="phase-card" id="phase-4">
+                <div class="phase-header">
+                    <h2>Phase 4: Start menu and taskbar layout</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-4"> Mark complete</label>
+                </div>
+                <ol>
+                    <li>To replace the Start button icon, right-click the menu button at the bottom-left of the panel and choose Properties. On the Appearance tab, click the Icon button, change the filter to Image Files or All Icons, and pick the Windows logo from <code>~/.icons/Windows-10-Icons/</code>. Set Display to Icon so the word "Menu" is hidden.</li>
+                    <li>To group and pin taskbar icons, right-click an empty spot on the panel, open Panel, select Panel Preferences, and switch to the Items tab:
+                        <ul>
+                            <li>If Docklike Taskbar is in the list (pre-installed on MX Linux 23.6), open apps already group into square icons. You can right-click any running app icon and choose Pin to Dock.</li>
+                            <li>If your panel uses Window Buttons instead, select it, click the gear icon to edit it, uncheck Show button labels, and set Window grouping to Always.</li>
+                        </ul>
+                    </li>
+                    <li>To match the Windows 10 bar height and color, stay in Panel Preferences. On the Display tab, set Row Size (pixels) to 40. On the Appearance tab, set Background Style to Solid color and pick dark charcoal (<code>#101010</code>).</li>
+                </ol>
+                <div class="verify-box">
+                    Check: Open applications appear as square icons along the bottom bar with active indicators underneath.
+                </div>
+            </section>
 
-    <!-- PHASE 5 -->
-    <section class="phase-card" id="phase-5">
-        <div class="phase-header">
-            <h2>Phase 5: Wallpaper and desktop icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <ol>
-            <li>Right-click an empty area of the desktop and select Desktop Settings.</li>
-            <li>On the Background tab, use the Folder menu to choose the directory where you saved your Windows 10 wallpaper.</li>
-            <li>Switch to the Icons tab, set Icon size to 48, and under Default Icons check Home, Filesystem, and Trash. Uncheck Removable Devices if you do not want mounted drives cluttering the desktop.</li>
-        </ol>
-    </section>
+            <!-- PHASE 5 -->
+            <section class="phase-card" id="phase-5">
+                <div class="phase-header">
+                    <h2>Phase 5: Wallpaper and desktop icons</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-5"> Mark complete</label>
+                </div>
+                <ol>
+                    <li>Right-click an empty area of the desktop and select Desktop Settings.</li>
+                    <li>On the Background tab, use the Folder menu to choose the directory where you saved your Windows 10 wallpaper.</li>
+                    <li>Switch to the Icons tab, set Icon size to 48, and under Default Icons check Home, Filesystem, and Trash. Uncheck Removable Devices if you do not want mounted drives cluttering the desktop.</li>
+                </ol>
+            </section>
 
-    <!-- PHASE 6 -->
-    <section class="phase-card" id="phase-6">
-        <div class="phase-header">
-            <h2>Phase 6: Install Windows 10 fonts (Segoe UI and Microsoft Core Fonts)</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>Windows 10 uses Segoe UI for interface labels and titlebars, along with standard Microsoft fonts such as Arial and Times New Roman for documents and web pages.</p>
-        <ol>
-            <li>Install the Microsoft core fonts package and fontconfig from the Debian and MX repositories:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y ttf-mscorefonts-installer fontconfig</code></pre>
-                <p>When the blue license prompt appears in the terminal, press Tab to highlight OK and press Enter, then select Yes to accept the license agreement.</p>
-            </li>
-            <li>Clone and run the Segoe UI font installer:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/mrbvrz/segoe-ui-linux.git /tmp/segoe-ui-linux
+            <!-- PHASE 6 -->
+            <section class="phase-card" id="phase-6">
+                <div class="phase-header">
+                    <h2>Phase 6: Install Windows 10 fonts (Segoe UI and Microsoft Core Fonts)</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-6"> Mark complete</label>
+                </div>
+                <p>Windows 10 uses Segoe UI for interface labels and titlebars, along with standard Microsoft fonts such as Arial and Times New Roman for documents and web pages.</p>
+                <ol>
+                    <li>Install the Microsoft core fonts package and fontconfig from the Debian and MX repositories:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y ttf-mscorefonts-installer fontconfig</code></pre>
+                        <p>When the blue license prompt appears in the terminal, press Tab to highlight OK and press Enter, then select Yes to accept the license agreement.</p>
+                    </li>
+                    <li>Clone and run the Segoe UI font installer:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/mrbvrz/segoe-ui-linux.git /tmp/segoe-ui-linux
 cd /tmp/segoe-ui-linux
 chmod +x install.sh
 ./install.sh</code></pre>
-            </li>
-            <li>Check that fontconfig detects Segoe UI:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>fc-list | grep -i "Segoe UI"</code></pre>
-            </li>
-            <li>Apply Segoe UI in Xfce:
-                <ul>
-                    <li>Open the Start menu, go to Settings, select Appearance, and open the Fonts tab.</li>
-                    <li>Set Default Font to Segoe UI Regular, size 9 or 10.</li>
-                    <li>Check Enable anti-aliasing, set Hinting to Slight, and set Sub-pixel order to RGB.</li>
-                    <li>Open Settings, select Window Manager, and on the Style tab set Title font to Segoe UI Semibold (or Regular), size 9.</li>
-                </ul>
-            </li>
-        </ol>
-        <div class="verify-box">
-            Check: Open Thunar. Both the window titlebar and the folder list now use Segoe UI.
-        </div>
-    </section>
+                    </li>
+                    <li>Check that fontconfig detects Segoe UI:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>fc-list | grep -i "Segoe UI"</code></pre>
+                    </li>
+                    <li>Apply Segoe UI in Xfce:
+                        <ul>
+                            <li>Open the Start menu, go to Settings, select Appearance, and open the Fonts tab.</li>
+                            <li>Set Default Font to Segoe UI Regular, size 9 or 10.</li>
+                            <li>Check Enable anti-aliasing, set Hinting to Slight, and set Sub-pixel order to RGB.</li>
+                            <li>Open Settings, select Window Manager, and on the Style tab set Title font to Segoe UI Semibold (or Regular), size 9.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="verify-box">
+                    Check: Open Thunar. Both the window titlebar and the folder list now use Segoe UI.
+                </div>
+            </section>
 
-    <!-- PHASE 7 -->
-    <section class="phase-card" id="phase-7">
-        <div class="phase-header">
-            <h2>Phase 7: Install and lock Windows 10 cursors</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>The Win10OS-cursors package provides the white Windows 10 pointer and the blue spinning ring animation.</p>
-        <ol>
-            <li>Clone the cursor repository and copy the built theme into <code>~/.icons</code>:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/yeyushengfan258/Win10OS-cursors.git /tmp/Win10OS-cursors
+            <!-- PHASE 7 -->
+            <section class="phase-card" id="phase-7">
+                <div class="phase-header">
+                    <h2>Phase 7: Install and lock Windows 10 cursors</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-7"> Mark complete</label>
+                </div>
+                <p>The Win10OS-cursors package provides the white Windows 10 pointer and the blue spinning ring animation.</p>
+                <ol>
+                    <li>Clone the cursor repository and copy the built theme into <code>~/.icons</code>:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/yeyushengfan258/Win10OS-cursors.git /tmp/Win10OS-cursors
 mkdir -p ~/.icons
 cp -r /tmp/Win10OS-cursors/dist ~/.icons/Win10OS-cursors</code></pre>
-            </li>
-            <li>Open the Start menu, go to Settings, select Mouse and Touchpad, and switch to the Theme tab. Choose Win10OS-cursors and set Cursor Size to 24.</li>
-            <li>Write a default cursor fallback file and update <code>xsettings</code> so the cursor does not switch back to the Xfce default over the desktop or inside non-GTK windows:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.icons/default
+                    </li>
+                    <li>Open the Start menu, go to Settings, select Mouse and Touchpad, and switch to the Theme tab. Choose Win10OS-cursors and set Cursor Size to 24.</li>
+                    <li>Write a default cursor fallback file and update <code>xsettings</code> so the cursor does not switch back to the Xfce default over the desktop or inside non-GTK windows:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.icons/default
 printf "[Icon Theme]
 Inherits=Win10OS-cursors
 " &gt; ~/.icons/default/index.theme
 xfconf-query --channel xsettings --property /Gtk/CursorThemeName --set "Win10OS-cursors"</code></pre>
-            </li>
-        </ol>
-        <div class="verify-box">
-            Check: Log out of Xfce and log back in. Move the pointer across the desktop, panel, and browser window to confirm the Windows 10 arrow stays active everywhere.
-        </div>
-    </section>
+                    </li>
+                </ol>
+                <div class="verify-box">
+                    Check: Log out of Xfce and log back in. Move the pointer across the desktop, panel, and browser window to confirm the Windows 10 arrow stays active everywhere.
+                </div>
+            </section>
 
-    <!-- PHASE 8 -->
-    <section class="phase-card" id="phase-8">
-        <div class="phase-header">
-            <h2>Phase 8: Save your panel and session</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>Saving a panel backup and a clean session state keeps your layout intact when you reboot.</p>
-        <ol>
-            <li>Open the Start menu, go to Settings, and open Panel Profiles. Click Save at the bottom, name the profile <code>Windows-10-Permanent</code>, and confirm.</li>
-            <li>Close all open windows on your desktop, then open the Start menu, go to Settings, and select Session and Startup. On the General tab, make sure Automatically save session on logout is unchecked. Switch to the Current Session tab and click Save Session.</li>
-        </ol>
-        <div class="verify-box">
-            Check: Reboot with <code>sudo reboot</code> and confirm that the bottom panel, theme, fonts, and cursor load on login.
-        </div>
-    </section>
+            <!-- PHASE 8 -->
+            <section class="phase-card" id="phase-8">
+                <div class="phase-header">
+                    <h2>Phase 8: Save your panel and session</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-8"> Mark complete</label>
+                </div>
+                <p>Saving a panel backup and a clean session state keeps your layout intact when you reboot.</p>
+                <ol>
+                    <li>Open the Start menu, go to Settings, and open Panel Profiles. Click Save at the bottom, name the profile <code>Windows-10-Permanent</code>, and confirm.</li>
+                    <li>Close all open windows on your desktop, then open the Start menu, go to Settings, and select Session and Startup. On the General tab, make sure Automatically save session on logout is unchecked. Switch to the Current Session tab and click Save Session.</li>
+                </ol>
+                <div class="verify-box">
+                    Check: Reboot with <code>sudo reboot</code> and confirm that the bottom panel, theme, fonts, and cursor load on login.
+                </div>
+            </section>
 
-    <!-- PHASE 9 -->
-    <section class="phase-card" id="phase-9">
-        <div class="phase-header">
-            <h2>Phase 9 (optional): Windows 10 login screen (LightDM)</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
-        </div>
-        <p>The LightDM login screen runs as <code>root</code> before your user folder is mounted, so it cannot read themes inside <code>~/.themes</code> or <code>~/.icons</code>. Copy the files into <code>/usr/share</code> first:</p>
-        <ol>
-            <li>Copy the dark theme and icon pack into the system directories:
-                <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo cp -r ~/.themes/Windows-10-Dark /usr/share/themes/
+            <!-- PHASE 9 -->
+            <section class="phase-card" id="phase-9">
+                <div class="phase-header">
+                    <h2>Phase 9 (optional): Windows 10 login screen (LightDM)</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="phase-9"> Mark complete</label>
+                </div>
+                <p>The LightDM login screen runs as <code>root</code> before your user folder is mounted, so it cannot read themes inside <code>~/.themes</code> or <code>~/.icons</code>. Copy the files into <code>/usr/share</code> first:</p>
+                <ol>
+                    <li>Copy the dark theme and icon pack into the system directories:
+                        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo cp -r ~/.themes/Windows-10-Dark /usr/share/themes/
 sudo cp -r ~/.icons/Windows-10-Icons /usr/share/icons/</code></pre>
-            </li>
-            <li>Open MX Tweak, switch to the LightDM (or Login) tab, and enter your administrator password. Set Theme to Windows-10-Dark, set Icons to Windows-10-Icons, pick a background image stored under <code>/usr/share/backgrounds/</code>, and click Apply.</li>
-        </ol>
-    </section>
+                    </li>
+                    <li>Open MX Tweak, switch to the LightDM (or Login) tab, and enter your administrator password. Set Theme to Windows-10-Dark, set Icons to Windows-10-Icons, pick a background image stored under <code>/usr/share/backgrounds/</code>, and click Apply.</li>
+                </ol>
+            </section>
 
-    <!-- TROUBLESHOOTING -->
-    <section class="phase-card" id="troubleshooting">
-        <div class="phase-header">
-            <h2>Phase 10: Troubleshooting</h2>
-            <label class="step-check"><input type="checkbox"> Mark complete</label>
+            <!-- TROUBLESHOOTING -->
+            <section class="phase-card" id="troubleshooting">
+                <div class="phase-header">
+                    <h2>Phase 10: Troubleshooting</h2>
+                    <label class="step-check"><input type="checkbox" data-phase="troubleshooting"> Mark complete</label>
+                </div>
+                <ul>
+                    <li>If the cursor reverts inside Flatpak apps, run <code>flatpak override --user --filesystem=~/.icons:ro</code> in the terminal so sandboxed apps can read your local <code>~/.icons</code> folder.</li>
+                    <li>If fonts look thin on a 1080p monitor, open Settings, select Appearance, go to the Fonts tab, enable Custom DPI setting at 96, and test Slight versus Medium hinting to see which matches your panel best.</li>
+                    <li>If the taskbar layout gets changed by accident, open Panel Profiles, select <code>Windows-10-Permanent</code>, and click Apply.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        MX Linux 23.6 (Xfce) to Windows 10 Transformation Runbook (Offline HTML Edition)
+    </footer>
+</div>
+
+<!-- Windows 10 Bottom Taskbar (Superbar) -->
+<div class="win10-taskbar" role="region" aria-label="Windows 10 taskbar status bar">
+    <div class="taskbar-left">
+        <button class="taskbar-start-btn" type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Scroll to top">
+            <svg viewBox="0 0 88 88" aria-hidden="true">
+                <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.529l.028 34.453L.028 75.48.026 45.7zm4.326-39.025L87.314 0v41.527l-47.318.376zm47.329 39.349l-.011 41.34-47.318-6.678-.066-34.739z"/>
+            </svg>
+        </button>
+        <div class="taskbar-app-item">
+            <span>Transformation Runbook</span>
         </div>
-        <ul>
-            <li>If the cursor reverts inside Flatpak apps, run <code>flatpak override --user --filesystem=~/.icons:ro</code> in the terminal so sandboxed apps can read your local <code>~/.icons</code> folder.</li>
-            <li>If fonts look thin on a 1080p monitor, open Settings, select Appearance, go to the Fonts tab, enable Custom DPI setting at 96, and test Slight versus Medium hinting to see which matches your panel best.</li>
-            <li>If the taskbar layout gets changed by accident, open Panel Profiles, select <code>Windows-10-Permanent</code>, and click Apply.</li>
-        </ul>
-    </section>
-</main>
-
-<footer>
-    MX Linux 23.6 (Xfce) to Windows 10 Transformation Runbook (Offline HTML Edition)
-</footer>
+    </div>
+    <div class="taskbar-tray">
+        <span class="taskbar-status-pill" id="taskbarProgressBadge">0 / 10 complete</span>
+        <div class="taskbar-clock" id="taskbarClock"></div>
+    </div>
+</div>
 
 <script>
+    const STORAGE_KEY_PROGRESS = 'mx_win10_runbook_progress_v1';
+    const STORAGE_KEY_THEME = 'mx_win10_runbook_theme_v1';
+
     function copyCode(button) {
         const pre = button.parentElement;
         const code = pre.querySelector('code').innerText;
@@ -485,6 +1060,120 @@ sudo cp -r ~/.icons/Windows-10-Icons /usr/share/icons/</code></pre>
             }, 1500);
         });
     }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const label = document.getElementById('themeToggleLabel');
+        if (label) {
+            label.textContent = theme === 'dark' ? 'Switch to Light mode' : 'Switch to Dark mode';
+        }
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try {
+            localStorage.setItem(STORAGE_KEY_THEME, next);
+        } catch (e) {}
+    }
+
+    function updateProgressUI() {
+        const checkboxes = Array.from(document.querySelectorAll('.step-check input[type="checkbox"]'));
+        const total = checkboxes.length;
+        let completed = 0;
+        const state = {};
+
+        checkboxes.forEach((cb) => {
+            const phaseId = cb.getAttribute('data-phase');
+            const card = cb.closest('.phase-card');
+            const navLink = document.querySelector(`.toc-grid a[data-target="${phaseId}"]`);
+            if (cb.checked) {
+                completed++;
+                if (card) card.classList.add('is-complete');
+                if (navLink) navLink.classList.add('completed-nav');
+            } else {
+                if (card) card.classList.remove('is-complete');
+                if (navLink) navLink.classList.remove('completed-nav');
+            }
+            if (phaseId) {
+                state[phaseId] = cb.checked;
+            }
+        });
+
+        const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+        const fill = document.getElementById('progressBarFill');
+        const pctLabel = document.getElementById('progressPercent');
+        const countLabel = document.getElementById('progressCountText');
+        const taskbarBadge = document.getElementById('taskbarProgressBadge');
+
+        if (fill) fill.style.width = pct + '%';
+        if (pctLabel) pctLabel.textContent = pct + '%';
+        if (countLabel) countLabel.textContent = `${completed} of ${total} phases complete`;
+        if (taskbarBadge) taskbarBadge.textContent = `${completed} / ${total} complete`;
+
+        try {
+            localStorage.setItem(STORAGE_KEY_PROGRESS, JSON.stringify(state));
+        } catch (e) {}
+    }
+
+    function loadSavedState() {
+        try {
+            const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
+            if (savedTheme === 'light' || savedTheme === 'dark') {
+                applyTheme(savedTheme);
+            } else {
+                applyTheme('dark');
+            }
+
+            const raw = localStorage.getItem(STORAGE_KEY_PROGRESS);
+            if (raw) {
+                const saved = JSON.parse(raw);
+                document.querySelectorAll('.step-check input[type="checkbox"]').forEach((cb) => {
+                    const phaseId = cb.getAttribute('data-phase');
+                    if (phaseId && typeof saved[phaseId] === 'boolean') {
+                        cb.checked = saved[phaseId];
+                    }
+                });
+            }
+        } catch (e) {
+            applyTheme('dark');
+        }
+        updateProgressUI();
+    }
+
+    function resetProgress() {
+        document.querySelectorAll('.step-check input[type="checkbox"]').forEach((cb) => {
+            cb.checked = false;
+        });
+        updateProgressUI();
+    }
+
+    function updateClock() {
+        const el = document.getElementById('taskbarClock');
+        if (!el) return;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateStr = now.toLocaleDateString([], { year: 'numeric', month: '2-digit', day: '2-digit' });
+        el.innerHTML = `<div>${timeStr}</div><div>${dateStr}</div>`;
+    }
+
+    document.querySelectorAll('.step-check input[type="checkbox"]').forEach((cb) => {
+        cb.addEventListener('change', updateProgressUI);
+    });
+
+    // Fluent Design Reveal Highlight mouse tracker
+    document.querySelectorAll('.phase-card').forEach((card) => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+    });
+
+    loadSavedState();
+    updateClock();
+    setInterval(updateClock, 15000);
 </script>
 
 </body>
