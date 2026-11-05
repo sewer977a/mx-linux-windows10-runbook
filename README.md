@@ -4,55 +4,42 @@
 [![Desktop: Xfce](https://img.shields.io/badge/Desktop-Xfce-lightblue)](https://xfce.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A complete step-by-step and automated runbook for transforming MX Linux 23.6 (Xfce) into a Windows 10 visual environment.
+This repository contains a manual guide and an automated script to make MX Linux 23.6 (Xfce) look and work like Windows 10.
 
-## Overview
-- **Visual Style:** B00merang Windows 10 Light and Dark GTK themes
-- **Icons:** B00merang Windows 10 Icons
-- **Fonts:** Segoe UI font family and Microsoft Core TrueType fonts
-- **Cursors:** Win10OS cursors with permanent fallback lock
-- **Taskbar:** Bottom-aligned horizontal panel with Docklike pinning
-- **Login Screen:** Optional Windows 10 LightDM styling
+The setup installs the B00merang Windows 10 Light and Dark GTK themes along with the matching icon pack, adds the Segoe UI font family and Microsoft Core TrueType fonts, and configures Win10OS cursors with a fallback file so the pointer does not revert inside different apps. It also moves the Xfce panel to a bottom horizontal taskbar with Docklike icon pinning and includes optional instructions for styling the LightDM login screen.
 
----
+## Quick start
 
-## Quick Start (Automated Script)
-
-Run the automated setup script to install all assets and configure Xfce settings:
+Run `install.sh` in your terminal to download the themes, fonts, and cursors and apply the Xfce desktop settings automatically:
 
 ```bash
 chmod +x install.sh
 ./install.sh
 ```
 
----
+## Manual setup
 
-## Manual Step-by-Step Instructions
+### 1. Move the panel to the bottom
+1. Open MX Tweak and select the Panel tab.
+2. Check Display panel horizontally and set the position to Bottom.
+3. Open Panel Preferences, switch to the Items tab, and enable Docklike Taskbar so open and pinned applications group into icons on the bar.
 
-### 1. Panel Configuration
-1. Open **MX Tweak** -> **Panel** tab.
-2. Select **Display panel horizontally** and set position to **Bottom**.
-3. In **Panel Preferences** -> **Items**, enable **Docklike Taskbar** for pinned icon grouping.
-
-### 2. Fonts & Rendering
-1. Install Microsoft fonts: `sudo apt install -y ttf-mscorefonts-installer fontconfig`
-2. Install Segoe UI:
+### 2. Install fonts and configure rendering
+1. Install the Microsoft core fonts and font utilities: `sudo apt install -y ttf-mscorefonts-installer fontconfig`
+2. Clone and run the Segoe UI installer:
    ```bash
    git clone https://github.com/mrbvrz/segoe-ui-linux.git /tmp/segoe-ui-linux
    cd /tmp/segoe-ui-linux && ./install.sh
    ```
-3. In **Settings -> Appearance -> Fonts**, set font to **Segoe UI Regular 9**, Hinting to **Slight**, and Sub-pixel order to **RGB**.
+3. In Settings, open Appearance and select the Fonts tab. Set the default font to Segoe UI Regular 9, hinting to Slight, and sub-pixel order to RGB.
 
-### 3. Cursors & Icons
-- Themes: `~/.themes/Windows-10` and `~/.themes/Windows-10-Dark`
-- Icons: `~/.icons/Windows-10-Icons`
-- Cursors: `~/.icons/Win10OS-cursors` with fallback `~/.icons/default/index.theme`
+### 3. Theme, icon, and cursor paths
+GTK themes are stored in `~/.themes/Windows-10` and `~/.themes/Windows-10-Dark`, and the icon pack is installed in `~/.icons/Windows-10-Icons`. The cursor theme lives in `~/.icons/Win10OS-cursors`, with `~/.icons/default/index.theme` set to inherit `Win10OS-cursors` so applications keep the same pointer after you log out.
 
-### 4. Session Persistence
-1. Open **Panel Profiles** -> Save current panel as `Windows-10-Permanent`.
-2. In **Session and Startup**, uncheck *Automatically save session on logout*, then click *Save Session*.
+### 4. Save the session
+1. Open Panel Profiles and save the current panel layout as `Windows-10-Permanent`.
+2. Open Session and Startup, uncheck Automatically save session on logout on the General tab, and click Save Session on the Current Session tab.
 
----
+## Interactive runbook and GitHub Pages
 
-## Live Interactive Runbook & GitHub Pages Preview
-View the interactive HTML version with progress checklists and one-click copy buttons by opening `index.html` locally in your browser, or enable **GitHub Pages** (`Settings` -> `Pages` -> `Deploy from a branch: main / (root)`) to host a live preview directly from this repository.
+Open `index.html` in a browser to use the offline runbook with section checkboxes and copy buttons for each terminal command. To host it online with GitHub Pages, open your repository Settings, go to Pages, and set the source to deploy from the `main` branch root.

@@ -214,11 +214,6 @@
             font-size: 0.93rem;
         }
 
-        .verify-box strong {
-            display: inline-block;
-            margin-right: 0.35rem;
-        }
-
         footer {
             text-align: center;
             padding: 2rem;
@@ -246,7 +241,7 @@
 <header>
     <div class="container">
         <h1>MX Linux 23.6 to Windows 10 Transformation Runbook</h1>
-        <p>Complete step-by-step permanent configuration guide for Xfce, including Segoe UI fonts, Windows 10 cursors, and LightDM login screen.</p>
+        <p>Step-by-step guide for configuring Xfce on MX Linux 23.6 with Windows 10 themes, Segoe UI fonts, cursors, and LightDM login settings.</p>
         <div class="meta-badges">
             <span class="badge">OS: MX Linux 23.6</span>
             <span class="badge">Desktop: Xfce</span>
@@ -258,198 +253,164 @@
 
 <main class="container">
     <div class="toc-card">
-        <h2>Quick Navigation</h2>
+        <h2>Quick navigation</h2>
         <ul class="toc-grid">
-            <li><a href="#phase-1">Phase 1: Move the Taskbar to the Bottom</a></li>
-            <li><a href="#phase-2">Phase 2: Download Windows 10 Themes &amp; Icons</a></li>
-            <li><a href="#phase-3">Phase 3: Apply Theme &amp; Window Borders</a></li>
-            <li><a href="#phase-4">Phase 4: Start Menu &amp; Taskbar Layout</a></li>
-            <li><a href="#phase-5">Phase 5: Wallpaper &amp; Desktop Icons</a></li>
-            <li><a href="#phase-6">Phase 6: Install Windows 10 Fonts (Segoe UI)</a></li>
-            <li><a href="#phase-7">Phase 7: Install &amp; Lock Windows 10 Cursors</a></li>
-            <li><a href="#phase-8">Phase 8: Lock In Your Permanent Setup</a></li>
-            <li><a href="#phase-9">Phase 9: Windows 10 Login Screen (Optional)</a></li>
-            <li><a href="#troubleshooting">Phase 10: Quick Troubleshooting</a></li>
+            <li><a href="#phase-1">Phase 1: Move the taskbar to the bottom</a></li>
+            <li><a href="#phase-2">Phase 2: Download Windows 10 themes and icons</a></li>
+            <li><a href="#phase-3">Phase 3: Apply the theme, window borders, and icons</a></li>
+            <li><a href="#phase-4">Phase 4: Start menu and taskbar layout</a></li>
+            <li><a href="#phase-5">Phase 5: Wallpaper and desktop icons</a></li>
+            <li><a href="#phase-6">Phase 6: Install Windows 10 fonts (Segoe UI)</a></li>
+            <li><a href="#phase-7">Phase 7: Install and lock Windows 10 cursors</a></li>
+            <li><a href="#phase-8">Phase 8: Save your panel and session</a></li>
+            <li><a href="#phase-9">Phase 9: Windows 10 login screen (optional)</a></li>
+            <li><a href="#troubleshooting">Phase 10: Troubleshooting</a></li>
         </ul>
     </div>
 
     <!-- PHASE 1 -->
     <section class="phase-card" id="phase-1">
         <div class="phase-header">
-            <h2>Phase 1: Move the Taskbar to the Bottom</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 1: Move the taskbar to the bottom</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>MX Linux places the taskbar vertically on the left edge of the screen by default. Move it to the bottom using <strong>MX Tweak</strong>:</p>
+        <p>MX Linux places the panel vertically along the left side of the screen by default. You can move it to the bottom edge in MX Tweak:</p>
         <ol>
-            <li>Press the <strong>Super (Windows) key</strong>, type <strong>MX Tweak</strong>, and press <strong>Enter</strong>.</li>
-            <li>Open the <strong>Panel</strong> tab.</li>
-            <li>Check <strong>Display panel horizontally</strong> and select <strong>Bottom</strong> from the position drop-down menu.</li>
-            <li>Click <strong>Apply</strong> in the bottom-right corner.</li>
+            <li>Press the Super (Windows) key, type MX Tweak, and press Enter.</li>
+            <li>Select the Panel tab.</li>
+            <li>Check Display panel horizontally and choose Bottom from the position menu.</li>
+            <li>Click Apply in the bottom-right corner.</li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> The taskbar snaps horizontally across the bottom edge of your screen with the Start button on the far left.
+            Check: The panel now runs horizontally along the bottom of the screen with the Start button on the left.
         </div>
     </section>
 
     <!-- PHASE 2 -->
     <section class="phase-card" id="phase-2">
         <div class="phase-header">
-            <h2>Phase 2: Download Windows 10 Themes and Icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 2: Download Windows 10 themes and icons</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>The <strong>B00merang Project</strong> maintains open-source Windows 10 GTK themes and icon packs that replicate Windows 10 File Explorer, buttons, and window titlebars.</p>
+        <p>The B00merang Project publishes GTK themes and icon packs that style Xfce windows and folders like Windows 10.</p>
         <ol>
-            <li>Open <strong>Xfce Terminal</strong> and install <code>git</code> if it is not already installed:
+            <li>Open Xfce Terminal and install <code>git</code> if you do not have it yet (<code>sudo</code> asks for your administrator password):
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y git</code></pre>
             </li>
-            <li>Create the local theme and icon folders in your home directory:
+            <li>Create the local theme and icon directories inside your home folder:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.themes ~/.icons</code></pre>
             </li>
-            <li>Download both the <strong>Light</strong> and <strong>Dark</strong> Windows 10 GTK themes and the Windows 10 icon pack:
+            <li>Clone the Light and Dark GTK themes along with the icon pack:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/B00merang-Project/Windows-10.git ~/.themes/Windows-10
 git clone https://github.com/B00merang-Project/Windows-10-Dark.git ~/.themes/Windows-10-Dark
 git clone https://github.com/B00merang-Artwork/Windows-10.git ~/.icons/Windows-10-Icons</code></pre>
             </li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Run <code>ls ~/.themes ~/.icons</code> in the terminal and confirm that <code>Windows-10</code>, <code>Windows-10-Dark</code>, and <code>Windows-10-Icons</code> appear in the output.
+            Check: Run <code>ls ~/.themes ~/.icons</code> in the terminal and confirm that <code>Windows-10</code>, <code>Windows-10-Dark</code>, and <code>Windows-10-Icons</code> are listed.
         </div>
     </section>
 
     <!-- PHASE 3 -->
     <section class="phase-card" id="phase-3">
         <div class="phase-header">
-            <h2>Phase 3: Apply the Theme, Window Borders, and Icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 3: Apply the theme, window borders, and icons</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>Xfce separates internal application styling from the top window titlebars (Minimize, Maximize, and Close buttons), so you need to set both.</p>
+        <p>Xfce uses separate settings for inside-window controls (GTK) and top titlebar borders (xfwm4), so you need to update both panels.</p>
         <ol>
-            <li><strong>Set Application Style and Icons:</strong>
-                <ul>
-                    <li>Open the <strong>Start Menu</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Appearance</strong>.</li>
-                    <li>Under the <strong>Style</strong> tab, select <strong>Windows-10</strong> (for Light mode) or <strong>Windows-10-Dark</strong> (for Dark mode).</li>
-                    <li>Switch to the <strong>Icons</strong> tab and select <strong>Windows-10-Icons</strong>.</li>
-                </ul>
-            </li>
-            <li><strong>Set Window Titlebars:</strong>
-                <ul>
-                    <li>Return to <strong>Settings Manager</strong> and open <strong>Window Manager</strong>.</li>
-                    <li>Under the <strong>Style</strong> tab, select <strong>Windows-10</strong> or <strong>Windows-10-Dark</strong> from the theme list.</li>
-                    <li>Under <strong>Button layout</strong>, verify that <strong>Menu</strong> is on the left and <strong>Minimize, Maximize, Close</strong> are on the right.</li>
-                </ul>
-            </li>
+            <li>Open the Start menu, go to Settings, and select Appearance. On the Style tab, choose Windows-10 for light mode or Windows-10-Dark for dark mode. Then switch to the Icons tab and select Windows-10-Icons.</li>
+            <li>Return to the Settings Manager and open Window Manager. On the Style tab, select Windows-10 or Windows-10-Dark to match your choice above. Under Button layout, make sure Menu is on the left and Minimize, Maximize, and Close are on the right.</li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Open the <strong>Thunar File Manager</strong>&mdash;the window now displays square Windows 10 titlebar buttons (with a red close button on hover) and flat yellow Windows 10 folders.
+            Check: Open the Thunar file manager. The window now uses square Windows 10 titlebar buttons with a red close button when you hover over it, and folders use flat yellow icons.
         </div>
     </section>
 
     <!-- PHASE 4 -->
     <section class="phase-card" id="phase-4">
         <div class="phase-header">
-            <h2>Phase 4: Customize the Start Menu and Taskbar Layout</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 4: Start menu and taskbar layout</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
         <ol>
-            <li><strong>Change the Start Button Icon:</strong>
+            <li>To replace the Start button icon, right-click the menu button at the bottom-left of the panel and choose Properties. On the Appearance tab, click the Icon button, change the filter to Image Files or All Icons, and pick the Windows logo from <code>~/.icons/Windows-10-Icons/</code>. Set Display to Icon so the word "Menu" is hidden.</li>
+            <li>To group and pin taskbar icons, right-click an empty spot on the panel, open Panel, select Panel Preferences, and switch to the Items tab:
                 <ul>
-                    <li>Right-click the Start Menu button on the bottom-left of the panel and select <strong>Properties</strong>.</li>
-                    <li>In the <strong>Appearance</strong> tab, click the <strong>Icon</strong> button, switch the dropdown to <strong>Image Files</strong> or <strong>All Icons</strong>, and select the Windows logo from <code>~/.icons/Windows-10-Icons/</code>.</li>
-                    <li>Set <strong>Display</strong> to <strong>Icon</strong> (so the word "Menu" is hidden, leaving only the logo).</li>
+                    <li>If Docklike Taskbar is in the list (pre-installed on MX Linux 23.6), open apps already group into square icons. You can right-click any running app icon and choose Pin to Dock.</li>
+                    <li>If your panel uses Window Buttons instead, select it, click the gear icon to edit it, uncheck Show button labels, and set Window grouping to Always.</li>
                 </ul>
             </li>
-            <li><strong>Enable Pinned Taskbar Icons (Windows 10 Superbar behavior):</strong>
-                <ul>
-                    <li>Right-click an empty space on the taskbar and select <strong>Panel</strong> &rarr; <strong>Panel Preferences</strong> &rarr; <strong>Items</strong> tab.</li>
-                    <li>If using <strong>Docklike Taskbar</strong> (pre-installed on MX Linux 23.6), open apps automatically group into square icons that you can right-click and <strong>Pin to Dock</strong> just like Windows 10.</li>
-                    <li>If using <strong>Window Buttons</strong>, select it, click the <strong>Edit (gear)</strong> icon, uncheck <strong>Show button labels</strong>, and set <strong>Window grouping</strong> to <strong>Always</strong>.</li>
-                </ul>
-            </li>
-            <li><strong>Match Taskbar Color &amp; Size:</strong>
-                <ul>
-                    <li>In <strong>Panel Preferences</strong> &rarr; <strong>Display</strong> tab, set <strong>Row Size (pixels)</strong> to <strong>40</strong>.</li>
-                    <li>In the <strong>Appearance</strong> tab, switch <strong>Background Style</strong> to <strong>Solid color</strong> and pick dark charcoal (<code>#101010</code>).</li>
-                </ul>
-            </li>
+            <li>To match the Windows 10 bar height and color, stay in Panel Preferences. On the Display tab, set Row Size (pixels) to 40. On the Appearance tab, set Background Style to Solid color and pick dark charcoal (<code>#101010</code>).</li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Launched applications appear as square icons along the bottom bar with active indicators underneath.
+            Check: Open applications appear as square icons along the bottom bar with active indicators underneath.
         </div>
     </section>
 
     <!-- PHASE 5 -->
     <section class="phase-card" id="phase-5">
         <div class="phase-header">
-            <h2>Phase 5: Set Wallpaper and Desktop Icons</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 5: Wallpaper and desktop icons</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
         <ol>
-            <li>Right-click anywhere on your desktop and select <strong>Desktop Settings</strong>.</li>
-            <li>In the <strong>Background</strong> tab, click the <strong>Folder</strong> dropdown to select the folder containing your Windows 10 wallpaper.</li>
-            <li>Switch to the <strong>Icons</strong> tab:
-                <ul>
-                    <li>Set <strong>Icon size</strong> to <strong>48</strong>.</li>
-                    <li>Under <strong>Default Icons</strong>, check <strong>Home</strong> (User folder), <strong>Filesystem</strong> (This PC), and <strong>Trash</strong> (Recycle Bin), and uncheck <strong>Removable Devices</strong> for a clean desktop.</li>
-                </ul>
-            </li>
+            <li>Right-click an empty area of the desktop and select Desktop Settings.</li>
+            <li>On the Background tab, use the Folder menu to choose the directory where you saved your Windows 10 wallpaper.</li>
+            <li>Switch to the Icons tab, set Icon size to 48, and under Default Icons check Home, Filesystem, and Trash. Uncheck Removable Devices if you do not want mounted drives cluttering the desktop.</li>
         </ol>
     </section>
 
     <!-- PHASE 6 -->
     <section class="phase-card" id="phase-6">
         <div class="phase-header">
-            <h2>Phase 6: Install Windows 10 Fonts (Segoe UI &amp; Microsoft Core Fonts)</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 6: Install Windows 10 fonts (Segoe UI and Microsoft Core Fonts)</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>Windows 10 relies on <strong>Segoe UI</strong> for system menus, titlebars, and file explorer labels, alongside classic Microsoft fonts for applications and web pages.</p>
+        <p>Windows 10 uses Segoe UI for interface labels and titlebars, along with standard Microsoft fonts such as Arial and Times New Roman for documents and web pages.</p>
         <ol>
-            <li><strong>Install Microsoft Core Fonts from Debian/MX Repositories:</strong>
+            <li>Install the Microsoft core fonts package and fontconfig from the Debian and MX repositories:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo apt update &amp;&amp; sudo apt install -y ttf-mscorefonts-installer fontconfig</code></pre>
-                <p><em>Tip: When the blue package configuration screen appears in the terminal, press <strong>Tab</strong> to highlight <strong>OK</strong> and press <strong>Enter</strong>, then select <strong>Yes</strong> to accept the EULA.</em></p>
+                <p>When the blue license prompt appears in the terminal, press Tab to highlight OK and press Enter, then select Yes to accept the license agreement.</p>
             </li>
-            <li><strong>Install the Segoe UI Font Family:</strong>
+            <li>Clone and run the Segoe UI font installer:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/mrbvrz/segoe-ui-linux.git /tmp/segoe-ui-linux
 cd /tmp/segoe-ui-linux
 chmod +x install.sh
 ./install.sh</code></pre>
             </li>
-            <li><strong>Verify Segoe UI Recognition:</strong>
+            <li>Check that fontconfig detects Segoe UI:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>fc-list | grep -i "Segoe UI"</code></pre>
             </li>
-            <li><strong>Set Segoe UI Permanently Across Xfce:</strong>
+            <li>Apply Segoe UI in Xfce:
                 <ul>
-                    <li>Open <strong>Start Menu</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Appearance</strong> &rarr; <strong>Fonts</strong> tab.</li>
-                    <li>Change <strong>Default Font</strong> to <strong>Segoe UI Regular</strong>, size <strong>9</strong> or <strong>10</strong>.</li>
-                    <li>Check <strong>Enable anti-aliasing</strong>, set <strong>Hinting</strong> to <strong>Slight</strong>, and set <strong>Sub-pixel order</strong> to <strong>RGB</strong> (matches Windows ClearType).</li>
-                    <li>Open <strong>Settings</strong> &rarr; <strong>Window Manager</strong> &rarr; <strong>Style</strong> tab, click the <strong>Title font</strong> button, and set it to <strong>Segoe UI Semibold</strong> (or <strong>Regular</strong>), size <strong>9</strong>.</li>
+                    <li>Open the Start menu, go to Settings, select Appearance, and open the Fonts tab.</li>
+                    <li>Set Default Font to Segoe UI Regular, size 9 or 10.</li>
+                    <li>Check Enable anti-aliasing, set Hinting to Slight, and set Sub-pixel order to RGB.</li>
+                    <li>Open Settings, select Window Manager, and on the Style tab set Title font to Segoe UI Semibold (or Regular), size 9.</li>
                 </ul>
             </li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Open Thunar File Manager; both the top window title and the sidebar folder names immediately render in crisp Segoe UI text.
+            Check: Open Thunar. Both the window titlebar and the folder list now use Segoe UI.
         </div>
     </section>
 
     <!-- PHASE 7 -->
     <section class="phase-card" id="phase-7">
         <div class="phase-header">
-            <h2>Phase 7: Install and Lock the Windows 10 Mouse Cursor</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 7: Install and lock Windows 10 cursors</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>The dedicated <strong>Win10OS-cursors</strong> package adds the complete Windows 10 cursor set, including the blue spinning background ring and busy animations.</p>
+        <p>The Win10OS-cursors package provides the white Windows 10 pointer and the blue spinning ring animation.</p>
         <ol>
-            <li><strong>Download and Install Win10OS Cursors:</strong>
+            <li>Clone the cursor repository and copy the built theme into <code>~/.icons</code>:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/yeyushengfan258/Win10OS-cursors.git /tmp/Win10OS-cursors
 mkdir -p ~/.icons
 cp -r /tmp/Win10OS-cursors/dist ~/.icons/Win10OS-cursors</code></pre>
             </li>
-            <li><strong>Activate the Cursor in Xfce Settings:</strong>
-                <ul>
-                    <li>Open <strong>Start Menu</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Mouse and Touchpad</strong> &rarr; <strong>Theme</strong> tab.</li>
-                    <li>Select <strong>Win10OS-cursors</strong> and set <strong>Cursor Size</strong> to <strong>24</strong>.</li>
-                </ul>
-            </li>
-            <li><strong>Make the Cursor Permanent Across All Apps (Prevent Revert Glitch):</strong>
+            <li>Open the Start menu, go to Settings, select Mouse and Touchpad, and switch to the Theme tab. Choose Win10OS-cursors and set Cursor Size to 24.</li>
+            <li>Write a default cursor fallback file and update <code>xsettings</code> so the cursor does not switch back to the Xfce default over the desktop or inside non-GTK windows:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>mkdir -p ~/.icons/default
 printf "[Icon Theme]
 Inherits=Win10OS-cursors
@@ -458,77 +419,58 @@ xfconf-query --channel xsettings --property /Gtk/CursorThemeName --set "Win10OS-
             </li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Log out of your Xfce session and log back in. Move your mouse over the desktop, taskbar, and browser window&mdash;the white Windows 10 arrow and blue loading ring remain consistent everywhere.
+            Check: Log out of Xfce and log back in. Move the pointer across the desktop, panel, and browser window to confirm the Windows 10 arrow stays active everywhere.
         </div>
     </section>
 
     <!-- PHASE 8 -->
     <section class="phase-card" id="phase-8">
         <div class="phase-header">
-            <h2>Phase 8: Lock In Your Permanent Setup</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 8: Save your panel and session</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>Backing up your panel profile and saving a clean Xfce session guarantees nothing resets across reboots or updates.</p>
+        <p>Saving a panel backup and a clean session state keeps your layout intact when you reboot.</p>
         <ol>
-            <li><strong>Save a Permanent Panel Backup (Panel Profiles):</strong>
-                <ul>
-                    <li>Open <strong>Start Menu</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Panel Profiles</strong>.</li>
-                    <li>Click <strong>Save</strong> at the bottom, name the profile <code>Windows-10-Permanent</code>, and click <strong>Save</strong>.</li>
-                </ul>
-            </li>
-            <li><strong>Lock Your Xfce Session State:</strong>
-                <ul>
-                    <li>Close all open applications on your desktop.</li>
-                    <li>Open <strong>Start Menu</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Session and Startup</strong>.</li>
-                    <li>Under the <strong>General</strong> tab, ensure <strong>Automatically save session on logout</strong> is <strong>unchecked</strong>.</li>
-                    <li>Switch to the <strong>Current Session</strong> tab and click <strong>Save Session</strong>.</li>
-                </ul>
-            </li>
+            <li>Open the Start menu, go to Settings, and open Panel Profiles. Click Save at the bottom, name the profile <code>Windows-10-Permanent</code>, and confirm.</li>
+            <li>Close all open windows on your desktop, then open the Start menu, go to Settings, and select Session and Startup. On the General tab, make sure Automatically save session on logout is unchecked. Switch to the Current Session tab and click Save Session.</li>
         </ol>
         <div class="verify-box">
-            <strong>Verification:</strong> Reboot your computer (<code>sudo reboot</code>). Your bottom taskbar, Windows 10 theme, Segoe UI fonts, and Windows 10 cursor load immediately upon login.
+            Check: Reboot with <code>sudo reboot</code> and confirm that the bottom panel, theme, fonts, and cursor load on login.
         </div>
     </section>
 
     <!-- PHASE 9 -->
     <section class="phase-card" id="phase-9">
         <div class="phase-header">
-            <h2>Phase 9 (Optional): Windows 10 Login Screen (LightDM)</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 9 (optional): Windows 10 login screen (LightDM)</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
-        <p>Because the login screen runs as <code>root</code> before your personal profile loads, copy the theme and icons to the system directory so LightDM can use them:</p>
+        <p>The LightDM login screen runs as <code>root</code> before your user folder is mounted, so it cannot read themes inside <code>~/.themes</code> or <code>~/.icons</code>. Copy the files into <code>/usr/share</code> first:</p>
         <ol>
-            <li><strong>Copy the Theme and Icons System-Wide:</strong>
+            <li>Copy the dark theme and icon pack into the system directories:
                 <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>sudo cp -r ~/.themes/Windows-10-Dark /usr/share/themes/
 sudo cp -r ~/.icons/Windows-10-Icons /usr/share/icons/</code></pre>
             </li>
-            <li><strong>Configure LightDM via MX Tweak:</strong>
-                <ul>
-                    <li>Open <strong>MX Tweak</strong> &rarr; click the <strong>LightDM</strong> (or <strong>Login</strong>) tab, and enter your password.</li>
-                    <li>Change <strong>Theme</strong> to <strong>Windows-10-Dark</strong> and <strong>Icons</strong> to <strong>Windows-10-Icons</strong>.</li>
-                    <li>Set the <strong>Background</strong> to an image stored in <code>/usr/share/backgrounds/</code>.</li>
-                    <li>Click <strong>Apply</strong>.</li>
-                </ul>
-            </li>
+            <li>Open MX Tweak, switch to the LightDM (or Login) tab, and enter your administrator password. Set Theme to Windows-10-Dark, set Icons to Windows-10-Icons, pick a background image stored under <code>/usr/share/backgrounds/</code>, and click Apply.</li>
         </ol>
     </section>
 
     <!-- TROUBLESHOOTING -->
     <section class="phase-card" id="troubleshooting">
         <div class="phase-header">
-            <h2>Phase 10: Quick Troubleshooting Reference</h2>
-            <label class="step-check"><input type="checkbox"> Mark Complete</label>
+            <h2>Phase 10: Troubleshooting</h2>
+            <label class="step-check"><input type="checkbox"> Mark complete</label>
         </div>
         <ul>
-            <li><strong>Cursor reverts inside Flatpak apps:</strong> Run <code>flatpak override --user --filesystem=~/.icons:ro</code> in the terminal so sandboxed apps can read your Windows 10 cursor theme.</li>
-            <li><strong>Fonts look thin on 1080p monitors:</strong> In <strong>Settings</strong> &rarr; <strong>Appearance</strong> &rarr; <strong>Fonts</strong>, set <strong>Custom DPI setting</strong> to <strong>96</strong> and change Hinting between <strong>Slight</strong> and <strong>Medium</strong> to match your monitor's sub-pixel layout.</li>
-            <li><strong>Restore Panel if accidentally modified:</strong> Open <strong>Panel Profiles</strong>, select <code>Windows-10-Permanent</code>, and click <strong>Apply</strong>.</li>
+            <li>If the cursor reverts inside Flatpak apps, run <code>flatpak override --user --filesystem=~/.icons:ro</code> in the terminal so sandboxed apps can read your local <code>~/.icons</code> folder.</li>
+            <li>If fonts look thin on a 1080p monitor, open Settings, select Appearance, go to the Fonts tab, enable Custom DPI setting at 96, and test Slight versus Medium hinting to see which matches your panel best.</li>
+            <li>If the taskbar layout gets changed by accident, open Panel Profiles, select <code>Windows-10-Permanent</code>, and click Apply.</li>
         </ul>
     </section>
 </main>
 
 <footer>
-    MX Linux 23.6 (Xfce) &rarr; Windows 10 Permanent Transformation Runbook &bull; Offline HTML Edition
+    MX Linux 23.6 (Xfce) to Windows 10 Transformation Runbook (Offline HTML Edition)
 </footer>
 
 <script>
